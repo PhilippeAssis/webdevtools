@@ -1,0 +1,40 @@
+#!/usr/bin/python
+
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-r","--remove", dest="remove", help="emoves the specified host (Default False)", default=False, action="store_true")
+(options, args) = parser.parse_args()
+
+if not args:
+    print 'You must spend at least the first parameter (site address)'
+    exit(0)
+
+site = args[0]
+ip = args[1] if len(args) > 1 else '127.0.0.1'
+
+with open('/etc/hosts', 'r') as file:
+    data = file.readlines()
+
+for i,line in enumerate(data):
+    if site in line:
+        if options.remove is True:
+            data[i] = ''
+            print "Host %s removed!" % site
+        else:
+            data[i] = ip+' '+site+'\n'
+            print "Host %s modified!" % site
+        break
+    if line in ['\n','\r\n'] and options.remove is False:
+        data[i] = ip+' '+site+'\n\n'
+        print "Host %s added!" % site
+        break
+    elif line in ['\n','\r\n'] and options.remove is True:
+        print "NO ACTION: Host does not exist, so it can not be removed."
+        break
+
+data = ''.join(data)
+
+conf = open('/etc/hosts','w+')
+conf.write(data)
+conf.close()

@@ -1,0 +1,55 @@
+#!/usr/bin/python
+
+from optparse import OptionParser, os
+
+parser = OptionParser()
+parser.add_option("--site", dest="site", help="Site Url")
+parser.add_option("--path", dest="path", help="directory path")
+parser.add_option("-p","--port", dest="port", help="Port (Default 80)", default='80')
+parser.add_option("-f","--force", dest="force", help="Forces the creation of directories if the specified path does not exist (Default False)", default=False, action="store_true")
+parser.add_option("-i","--ip", dest="ip", help="IP for which the URL address should be directed to when the host is locally generated", default='127.0.0.1')
+parser.add_option("-l","--local", dest="host", help="By declaring -l, will be created an entry in / etc / hosts to the current site", default=False, action="store_true")
+
+(options,args) = parser.parse_args()
+site = options.site or args[0]
+path = options.path or args[1]
+
+if site is None:
+    print "ERROR: the url of the site is required. Use '-s www.example.com' to declare the url or '-h' for more details."
+    exit(0)
+
+if path is None:
+    print "ERROR: The path is required. Use the '-p /path/to/site' to declare the path or -help for more details."
+    exit(0)
+
+if not os.path.isdir(path) and options.force == False:
+    print "ERROR: The stated path does not exist in the system. Use '-f' or '--force' to force its creation or '-h' for more details"
+    exit(0)
+elif not os.path.isdir(path) and options.force == True:
+    os.makedirs(path)
+
+if options.host is True:
+    os.system("devhost %s %s" % (site,options.ip))
+
+print 'Create directory:'
+print path+"\n"
+
+text = """#created by site
+<VirtualHost *:%s>
+    ServerName %s
+    ServerAdmin webmaster@localhost
+    DocumentRoot %s
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>""" % (options.port,site,path)
+
+
+conf = open('/etc/apache2/sites-available/%s.conf' % site,'w+')
+conf.write(text)
+conf.close()
+
+print 'Create apache2 config:'
+print text+'\n'
+
+os.system("sudo a2ensite %s" % site)
+os.system("sudo service apache2 reload")
