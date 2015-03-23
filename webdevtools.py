@@ -30,48 +30,39 @@
  $$                                                              $$
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 """
-from optparse import OptionParser,os
+from optparse import OptionParser, os
 
 parser = OptionParser()
-parser.add_option("-r","--remove", dest="remove", help="Removes the specified host", default=False, action="store_true")
+
+parser.add_option("-r",help="Site: Remove site |Host: Removes the specified host",
+                  default=False, action="store_true")
+parser.add_option("-p", help="Port (Default 80)", default='80')
+parser.add_option("-f", help="Forces the creation of directories if the specified path does not "
+                                                 "exist", default=False, action="store_true")
+parser.add_option("-i" ,help="IP for which the URL address should be directed to when the host is locally generated (Default 127.0.0.1)", default='127.0.0.1')
+parser.add_option("-l", help="By declaring -l, will be created an entry in /etc/hosts to the current site",
+                  default=False, action="store_true")
+
 (options, args) = parser.parse_args()
 
-if not args:
-    print('You must spend at least the first parameter (site address)')
-    exit(0)
+params = ''
 
-site = args[0]
-ip = args[1] if len(args) > 1 else '127.0.0.1'
-
-# uid = os.environ.get('SUDO_UID')
-# gid = os.environ.get('SUDO_GID')
-# if uid is not None:
-#     os.chown('/etc/hosts', int(uid), int(gid))
-
-with open('/etc/hosts', 'r') as file:
-    data = file.readlines()
-
-for i,line in enumerate(data):
-    if site in line:
-        if options.remove is True:
-            data[i] = ''
-            print("Host %s removed!" % site)
+if args:
+    for i,arg in enumerate(args):
+        if i == 0:
+            params = 'dev'+arg+' '
         else:
-            data[i] = ip+' '+site+'\n'
-            print("Host %s modified!" % site)
-        break
-    if line in ['\n','\r\n'] and options.remove is False:
-        data[i] = ip+' '+site+'\n\n'
-        print("Host %s added!" % site)
-        break
-    elif line in ['\n','\r\n'] and options.remove is True:
-        print("NO ACTION: Host does not exist, so it can not be removed.")
-        break
+            params += arg+' '
 
-data = ''.join(data)
+print(options.values())
+exit(0)
 
-conf = open('/etc/hosts','w+')
-conf.write(data)
-conf.close()
+if options:
+    for (key,item) in options.values():
+        print(key)
+
+
+print(params)
+# os.system(params)
 
 exit(0)

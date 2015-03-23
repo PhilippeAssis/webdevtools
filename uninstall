@@ -30,48 +30,35 @@
  $$                                                              $$
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 """
-from optparse import OptionParser,os
+import os, sys, random
 
-parser = OptionParser()
-parser.add_option("-r","--remove", dest="remove", help="Removes the specified host", default=False, action="store_true")
-(options, args) = parser.parse_args()
+def query(question, default="yes"):
+    valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
+    if default is None:
+        prompt = " [y/n] "
+    elif default == "yes":
+        prompt = " [Y/n] "
+    elif default == "no":
+        prompt = " [y/N] "
+    else:
+        raise ValueError("invalid default answer: '%s'" % default)
 
-if not args:
-    print('You must spend at least the first parameter (site address)')
-    exit(0)
-
-site = args[0]
-ip = args[1] if len(args) > 1 else '127.0.0.1'
-
-# uid = os.environ.get('SUDO_UID')
-# gid = os.environ.get('SUDO_GID')
-# if uid is not None:
-#     os.chown('/etc/hosts', int(uid), int(gid))
-
-with open('/etc/hosts', 'r') as file:
-    data = file.readlines()
-
-for i,line in enumerate(data):
-    if site in line:
-        if options.remove is True:
-            data[i] = ''
-            print("Host %s removed!" % site)
+    while True:
+        sys.stdout.write(question + prompt)
+        choice = input().lower()
+        if default is not None and choice == '':
+            return valid[default]
+        elif choice in valid:
+            return valid[choice]
         else:
-            data[i] = ip+' '+site+'\n'
-            print("Host %s modified!" % site)
-        break
-    if line in ['\n','\r\n'] and options.remove is False:
-        data[i] = ip+' '+site+'\n\n'
-        print("Host %s added!" % site)
-        break
-    elif line in ['\n','\r\n'] and options.remove is True:
-        print("NO ACTION: Host does not exist, so it can not be removed.")
-        break
+            sys.stdout.write("Please respond with 'yes' or 'no' (or 'y' or 'n').\n")
 
-data = ''.join(data)
+print("All auterações made Web Dev Tools alert will be maintained even if the program is uninstalled. They should be modified manually.")
 
-conf = open('/etc/hosts','w+')
-conf.write(data)
-conf.close()
-
-exit(0)
+if query('Are you sure you want to uninstall the Web Dev Tools?',default="no") is True:
+    os.system("sudo rm /usr/local/bin/devhost")
+    os.system("sudo rm /usr/local/bin/devsite")
+    print('WDT: Unfortunately Web Dev Tools has been successfully uninstalled... Goodbye :(')
+else:
+    tanks = random.choice(['I like it here.','I believe that we will be great friends.','We will be happy together.'])
+    print('Thank you for not remove me ... %s' % tanks)
