@@ -72,36 +72,6 @@ print("""
  $$                                                              $$
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
-
- How to use:
-
- I - SITES
-
- I.I - Creating a new site in Apache 2.4:
-
- To create a website on your apache2 creating his directory,
- failing that, and adding a host on your localhost, just type:
-
-    sudo devsite <site.url> </directory/path> -f -l
-
- I.II - Removing Site
- To remove a website and you host, simply assing a
-
-    sudo devsite <site.url> -r -l
-
- II - HOSTS
-
- II.I - Creating a host
- To create or modify a host type
-
-    sudo devhost <site.url> <ip>
-
- II.II - Removing a host
- To remove a host type
-
-    sudo devhost <site.url> <ip> -r
-
-
  IMPORTANT!
 
  The use of the root (sudo) may not be necessary if your user has

@@ -30,19 +30,31 @@
  $$                                                              $$
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 """
-from optparse import OptionParser, os
+from optparse import OptionParser
+import os, tools
 
 parser = OptionParser()
-parser.add_option("-p","--port", dest="port", help="Port (Default 80)", default='80')
-parser.add_option("-f","--force", dest="force", help="Forces the creation of directories if the specified path does not exist", default=False, action="store_true")
+parser.add_option("--auto", dest="auto", help="Using default settings if the custom is not declared.", default='1')
+parser.add_option("--port", dest="port", help="Port (Default 80)", default='80')
+parser.add_option("--path", dest="path", help="To declare te removal, remove the site directory completely", default=False, action="store_true")
+parser.add_option("--notcreatedir", dest="notcreatedir", help="Does not create directories if the specified path does not exist (Defaul: True)", default=False, action="store_true")
 parser.add_option("-i","--ip", dest="ip", help="IP for which the URL address should be directed to when the host is locally generated (Default 127.0.0.1)", default='127.0.0.1')
 parser.add_option("-l","--local", dest="host", help="By declaring -l, will be created an entry in /etc/hosts to the current site", default=False, action="store_true")
 parser.add_option("-r","--remove", dest="remove", help="Remove site", default=False, action="store_true")
 
 (options,args) = parser.parse_args()
 site = args[0]
-if options.remove is False:
+if options.remove is False and len(args) > 1:
     path = args[1]
+elif options.remove is False and len(args) == 1 and options.auto is '1':
+    print("As the directory path is not specified, '/var/www/'" +site+" is created")
+    path = '/var/www/'+site
+elif options.remove is True:
+    path = tools.locateLine("/etc/apache2/sites-available/%s.conf" % site,'DocumentRoot')
+    if path is not None:
+        path = path.replace('DocumentRoot ','')
+else:
+    path = None
 
 if site is None:
     print("ERROR: the url of the site is required. Use '-s www.example.com' to declare the url or '-h' for more details.")
@@ -61,18 +73,21 @@ if options.remove is True:
     if options.host is True:
         print("Removing host...")
         os.system("devhost %s -r" % site)
+    if options.path is True and path is not None:
+        if tools.query("Are you sure you want to remove the directory, it will be deleted altogether?",'no') is True:
+            os.system("sudo rm -R %s" % path)
 
     print("Site successfully removed, but created directories were kept. They must be removed manually.")
     exit(0)
 
 if path is None:
-    print("ERROR: The path is required. Use the '-p /path/to/site' to declare the path or -help for more details.")
+    print("Could not create or point the way of ditetório. Declare the way as the second argument or declare --auto = 1")
     exit(0)
 
-if not os.path.isdir(path) and options.force == False:
-    print("ERROR: The stated path does not exist in the system. Use '-f' or '--force' to force its creation or '-h' for more details")
+if not os.path.isdir(path) and options.auto is not '1':
+    print("Could not create the specified directory and point, reason: --auto=1 declared")
     exit(0)
-elif not os.path.isdir(path) and options.force == True:
+elif not os.path.isdir(path) and options.auto is '1':
     os.makedirs(path)
 
 if options.host is True:

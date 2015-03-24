@@ -32,15 +32,32 @@ Wait for the installation and enjoy!
 ###SITES
 #####Creating a new site in Apache 2.4:
 
-To create a website on your apache2 creating his directory,
-failing that, and adding a host on your localhost, just type:
+To create a conf in your apache 2, create a new directory for your project with the site name and add it to your local host, use:
 
-    $ sudo devsite <site.url> </directory/path> -f -l
+    $ sudo devsite <site.url> -l
 
 ####Removing Site
 To remove a website and you host, simply assing a
  
     $ sudo devsite <site.url> -r -l
+
+If you want to remove the project directory also, use:
+
+    $ sudo devsite <site.url> -r -l --path
+
+If you want to manually point the way of the project root directory, you must assign the path in the second argument, like this:
+
+    $ sudo devsite <site.url> <path>
+    
+You can assign '-l' at any time in your devsite command. It will cause your order also works with the local host using the automativamente devhost command.
+
+To prevent the application manipulate the website directories, preventing them to be created if there are no, or removed, you must set the --auto option to 0
+
+    $ sudo devsite  
+
+
+###Using devsite without creating or removing directories
+
 
 ###HOSTS
 ####Creating a host
