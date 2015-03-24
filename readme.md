@@ -1,5 +1,4 @@
 #Web Dev Tools
-Version: 1.0
 
 ##License
 ###Copyright 2015 PHILIPPE ASSIS
