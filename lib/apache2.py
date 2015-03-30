@@ -1,10 +1,5 @@
 import os
 
-<<<<<<< HEAD
-from lib.tools import tools
-
-=======
->>>>>>> fully modified
 class apache2:
     def __init__(self, site, path=None):
         self.site = site
@@ -31,12 +26,8 @@ class apache2:
         print(text + '\n')
 
         os.system("sudo a2ensite %s" % self.site)
-
-<<<<<<< HEAD
-=======
         self.save()
 
->>>>>>> fully modified
     def remove(self, path=False):
         print("Removing %s..." % self.site)
         if os.path.exists("/etc/apache2/sites-available/%s.conf" % self.site) is True:
@@ -45,18 +36,9 @@ class apache2:
         else:
             print("NO ACTION: Site does not exist")
 
-<<<<<<< HEAD
-        if path is True and self.path is not None:
-            if tools.query("Are you sure you want to remove the directory, it will be deleted altogether?",
-                           'no') is True:
-                os.system("sudo rm -R %s" % self.path)
-
-        print("Site successfully removed, but created directories were kept. They must be removed manually.")
-=======
         print("Site successfully removed, but created directories were kept.")
 
         self.save()
->>>>>>> fully modified
 
     def save(self):
         os.system("sudo service apache2 reload")
