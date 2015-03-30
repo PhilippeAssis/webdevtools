@@ -32,12 +32,19 @@
 """
 import os
 from optparse import OptionParser
+<<<<<<< HEAD
 
+=======
+>>>>>>> fully modified
 from lib.tools import tools
 from lib.apache2 import apache2
 from lib.hosts import hosts
 
 
+<<<<<<< HEAD
+=======
+# Setting parameters
+>>>>>>> fully modified
 usage = "usage: %prog [action*] url* [path|ip] [ip] [options]"
 parser = OptionParser(usage=usage)
 parser.add_option("--auto", dest="auto", help="Using default settings if the custom is not declared.", default='1')
@@ -57,10 +64,18 @@ parser.add_option("-r", "--remove", dest="remove", help="Remove site.py", defaul
 
 (options, args) = parser.parse_args()
 
+<<<<<<< HEAD
+=======
+# Returning 'help' if no argument is declared
+>>>>>>> fully modified
 if len(args) == 0:
     os.system("webdev -h")
     exit(0)
 
+<<<<<<< HEAD
+=======
+# Defining arguments
+>>>>>>> fully modified
 action = args[0]
 name = args[1]
 
@@ -71,6 +86,7 @@ if name is None:
 
 if len(args) > 2:
     if action == 'site':
+<<<<<<< HEAD
         path = args[3]
         if len(args) > 3:
             ip = args[4]
@@ -78,16 +94,30 @@ if len(args) > 2:
             ip = options.ip
     elif action == 'host':
         ip = args[3]
+=======
+        path = args[2]
+        if len(args) > 3:
+            ip = args[3]
+        else:
+            ip = options.ip
+    elif action == 'host':
+        ip = args[2]
+>>>>>>> fully modified
 else:
     path = None
     ip = options.ip
 
+<<<<<<< HEAD
 
+=======
+# Action of command 'site'
+>>>>>>> fully modified
 if action == 'site':
     if options.remove is False and path is None and options.auto is '1':
         print("As the directory path is not specified, '/var/www/'" + name + " is created")
         path = '/var/www/' + name
     elif options.remove is True and path is None:
+<<<<<<< HEAD
         path = tools.locateLine("/etc/apache2/sites-available/%s.conf" % name, 'DocumentRoot')
         if path is not None:
             path = path.replace('DocumentRoot ', '')
@@ -100,6 +130,38 @@ if action == 'site':
     apache = apache2(name, path)
     host = hosts(name, ip)
 
+=======
+
+        # Finding path in the conf apache
+        path = tools.locateLine("/etc/apache2/sites-available/%s.conf" % name, 'DocumentRoot')
+
+        if path is not None:
+            for ch in ['DocumentRoot', ' ', '\'', '\n']:
+                path = path.replace(ch, '')
+        else:
+            print('Path not found, action aborted.\n')
+            exit(0)
+
+    # Instantiating classes
+    apache = apache2(name, path)
+    host = hosts(name, ip)
+
+    # Evaluating build directory or removal
+    if os.path.exists(path) is False and options.remove is False:
+        if options.notcreatedir is False:
+            os.makedirs(path)
+        else:
+            print('The directory path does not exist. Action aborted.\n')
+            exit(0)
+    elif os.path.exists(path) is True and options.remove is True and options.path is True:
+        if tools.query('Are you sure you want to remove It directory and all its contents?', 'no') is True:
+            os.rmdir(path)
+            print('Directory %s removed.\n' % path)
+        else:
+            print('Directory %s not removed.\n' % path)
+
+    # Adding, updating or removing the conf apache and the host, if necessary
+>>>>>>> fully modified
     if options.remove:
         apache.remove(options.path)
         host.remove()
@@ -107,16 +169,25 @@ if action == 'site':
         apache.created(options.port)
         if options.host is True:
             host.created()
+<<<<<<< HEAD
             host.save()
 
     apache.save()
 
+=======
+
+# Action of command 'host'
+>>>>>>> fully modified
 elif action == 'host':
     host = hosts(name, ip)
 
     if options.remove:
         host.remove()
     else:
+<<<<<<< HEAD
         host.created()
 
     host.save()
+=======
+        host.created()
+>>>>>>> fully modified

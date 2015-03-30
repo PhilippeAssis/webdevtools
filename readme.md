@@ -12,7 +12,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
 1 - Unzip the package to a location of your choice (I nominate /opt/webdevtools).
     To decompress using the terminal use:
     
-    $ sudo unzip webdevtools.zip -d /opt/webdevtools     
+    $ unzip webdevtools.zip -d /opt/webdevtools     
 
 2 - Access the unzipped directory from the command line.
     
@@ -34,46 +34,50 @@ Wait for the installation and enjoy!
 
 To create a conf in your apache 2, create a new directory for your project with the site name and add it to your local host, use:
 
-    $ sudo devsite <site.url> -l
+    $ webdev site <site.url> -l
 
 ####Removing Site
 To remove a website and you host, simply assing a
  
-    $ sudo devsite <site.url> -r -l
+    $ webdev site <site.url> -r -l
 
 If you want to remove the project directory also, use:
 
-    $ sudo devsite <site.url> -r -l --path
+    $ webdev site <site.url> -r -l --path
 
 If you want to manually point the way of the project root directory, you must assign the path in the second argument, like this:
 
-    $ sudo devsite <site.url> <path>
+    $ webdev site <site.url> <path>
     
-You can assign '-l' at any time in your devsite command. It will cause your order also works with the local host using the automativamente devhost command.
+You can assign '-l' at any time in your webdev site command. It will cause your order also works with the local host using the automativamente webdev host command.
 
 To prevent the application manipulate the website directories, preventing them to be created if there are no, or removed, you must set the --auto option to 0
 
-    $ sudo devsite  
+    $ webdev site --auto=0  
+    
+If you need to edit the host ip in creating the site, enter the IP as terceito argument command 'webdev site'
+
+    $ webdev site <site.url> <site.path> <ip>
 
 
-###Using devsite without creating or removing directories
+###Using webdev site without creating or removing directories
 
 
 ###HOSTS
 ####Creating a host
 To create or modify a host type
 
-    $ sudo devhost <site.url> <ip>
+    $ webdev host <site.url> <ip>
 
 ####Removing a host
 To remove a host type
 
-    $ sudo devhost <site.url> <ip> -r
+    $ webdev host <site.url> <ip> -r
 
 For details on the parameter settings for each program Use '-h'
 
 ###Important!
-The use of the root (sudo) may not be necessary if your user has permission to edit the contents of the following directories:
+The use of the root (sudo) may be necessary if your user has not permission to edit the contents of the following directories:
 
     /etc/apache2/site-avaliable
     
@@ -83,7 +87,9 @@ In these directories, directory paths chosen for the sites should also be allowe
 
 ###Information about the parameters
 
-####devsite
+    Usage webdev [action*] url* [path|ip] [ip] [options]
+
+####webdev site
     <Site Url>* <directory path>
     -h, --help            Show this help message and exit
     -p PORT, --port=PORT  Port (Default 80) 
@@ -94,7 +100,7 @@ In these directories, directory paths chosen for the sites should also be allowe
     
     *required
 
-####devhost
+####webdev host
     <Site Url>* <Ip>
     -h, --help    Show this help message and exit
     -r, --remove  Removes the specified host

@@ -90,6 +90,8 @@ print("""
 
  For details on the parameter settings for each program Use '-h'
 
+ Run webdev or webdevtools to start!
+
  Good job!
 """)
 

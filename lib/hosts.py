@@ -10,6 +10,10 @@ class hosts:
             if self.site in line:
                 self.data[i] = ''
                 print("Host %s removed!" % self.site)
+<<<<<<< HEAD
+=======
+        self.save()
+>>>>>>> fully modified
 
     def created(self):
         for i, line in enumerate(self.data):
@@ -25,6 +29,10 @@ class hosts:
             elif line in ['\n', '\r\n']:
                 print("NO ACTION: Host does not exist, so it can not be removed.")
                 break
+<<<<<<< HEAD
+=======
+        self.save()
+>>>>>>> fully modified
 
     def save(self):
         data = ''.join(self.data)
