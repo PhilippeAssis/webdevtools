@@ -26,7 +26,7 @@ class hosts:
                 print("NO ACTION: Host does not exist, so it can not be removed.")
                 break
 
-    def __iter__(self):
+    def save(self):
         data = ''.join(self.data)
         conf = open('/etc/hosts','w+')
         conf.write(data)

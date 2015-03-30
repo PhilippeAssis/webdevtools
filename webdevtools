@@ -107,6 +107,9 @@ if action == 'site':
         apache.created(options.port)
         if options.host is True:
             host.created()
+            host.save()
+
+    apache.save()
 
 elif action == 'host':
     host = hosts(name, ip)
@@ -115,3 +118,5 @@ elif action == 'host':
         host.remove()
     else:
         host.created()
+
+    host.save()

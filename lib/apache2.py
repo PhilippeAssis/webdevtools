@@ -28,7 +28,6 @@ class apache2:
         print(text + '\n')
 
         os.system("sudo a2ensite %s" % self.site)
-        return;
 
     def remove(self, path=False):
         print("Removing %s..." % self.site)
@@ -44,8 +43,7 @@ class apache2:
                 os.system("sudo rm -R %s" % self.path)
 
         print("Site successfully removed, but created directories were kept. They must be removed manually.")
-        return;
 
-    def __iter__(self):
+    def save(self):
         os.system("sudo service apache2 reload")
         os.system("sudo service apache2 restart")
