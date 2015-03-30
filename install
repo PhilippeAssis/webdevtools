@@ -31,10 +31,10 @@
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 """
 import os
+dir = os.path.dirname(os.path.abspath(__file__))
 
-os.system("sudo ln host /usr/local/bin/devhost")
-os.system("sudo ln site /usr/local/bin/devsite")
-os.system("sudo ln uninstall /usr/local/bin/devuninstall")
+os.system("sudo ln -s %s/webdevtools /usr/local/bin/webdevtools" % dir)
+os.system("sudo ln -s %s/webdevtools /usr/local/bin/webdev" % dir)
 
 
 print('WDT: Web Dev Tools has been successfully installed!')
