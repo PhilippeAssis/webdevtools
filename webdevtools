@@ -132,7 +132,7 @@ if action == 'site':
 
     # Adding, updating or removing the conf apache and the host, if necessary
     if options.remove:
-        apache.remove(options.path)
+        apache.remove()
         host.remove()
     else:
         apache.created(options.port)
