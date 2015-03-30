@@ -29,7 +29,7 @@ class apache2:
         os.system("sudo a2ensite %s" % self.site)
         self.save()
 
-    def remove(self, path=False):
+    def remove(self):
         print("Removing %s..." % self.site)
         if os.path.exists("/etc/apache2/sites-available/%s.conf" % self.site) is True:
             os.system("sudo a2dissite %s" % self.site)
