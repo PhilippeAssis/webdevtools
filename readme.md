@@ -58,6 +58,10 @@ To prevent the application manipulate the website directories, preventing them t
 If you need to edit the host ip in creating the site, enter the IP as terceito argument command 'webdev site'
 
     $ webdev site <site.url> <site.path> <ip>
+    
+To decompress zip files when creating directories as command 'webdev site', use:
+
+    $ webdev site <site.url> -z <path.zip>
 
 
 ###Using webdev site without creating or removing directories

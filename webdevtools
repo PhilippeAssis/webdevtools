@@ -30,7 +30,7 @@
  $$                                                              $$
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 """
-import os
+import os, shutil
 from optparse import OptionParser
 
 from lib.tools import tools
@@ -58,6 +58,8 @@ parser.add_option("-l", "--local", dest="host",
                   help="By declaring -l, will be created an entry in /etc/hosts to the current site.py", default=False,
                   action="store_true")
 parser.add_option("-r", "--remove", dest="remove", help="Remove site.py", default=False, action="store_true")
+parser.add_option("-z", "--unzip", dest="unzip", help="Unzip in path", default=None)
+
 
 (options, args) = parser.parse_args()
 
@@ -108,6 +110,7 @@ if action == 'site':
     apache = apache2(name, path)
     host = hosts(name, ip)
 
+
     # Evaluating build directory or removal
     if os.path.exists(path) is False and options.remove is False:
         if options.notcreatedir is False:
@@ -117,10 +120,15 @@ if action == 'site':
             exit(0)
     elif os.path.exists(path) is True and options.remove is True and options.path is True:
         if tools.query('Are you sure you want to remove It directory and all its contents?', 'no') is True:
-            os.rmdir(path)
+            shutil.rmtree(path)
             print('Directory %s removed.\n' % path)
         else:
             print('Directory %s not removed.\n' % path)
+
+
+    if options.unzip is not None and options.remove is False:
+        print('Unpacking files...\n')
+        os.system('sudo unzip %s -d %s' % (options.unzip,path))
 
     # Adding, updating or removing the conf apache and the host, if necessary
     if options.remove:
