@@ -1,5 +1,6 @@
 import os
 
+
 class apache2:
     def __init__(self, site, path=None):
         self.site = site

@@ -40,6 +40,7 @@ from lib.hosts import hosts
 
 
 
+
 # Setting parameters
 usage = "usage: %prog [action*] url* [path|ip] [ip] [options]"
 parser = OptionParser(usage=usage)
@@ -93,7 +94,7 @@ if action == 'site':
         print("As the directory path is not specified, '/var/www/'" + name + " is created")
         path = '/var/www/' + name
     elif options.remove is True and path is None:
-       # Finding path in the conf apache
+        # Finding path in the conf apache
         path = tools.locateLine("/etc/apache2/sites-available/%s.conf" % name, 'DocumentRoot')
 
         if path is not None:
