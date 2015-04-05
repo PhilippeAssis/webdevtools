@@ -138,17 +138,17 @@ In these directories, directory paths chosen for the sites should also be allowe
 ####host
     webdev host <Site Url>* <Ip>
     
-    -h, --help    Show this help message and exit
-    -r, --remove  Removes the specified host
+    -h, --help      Show this help message and exit
+    -r, --remove    Removes the specified host
     
     *required
     
 ####join
     webdev join <new.filename>* <target1>* <target2> <...>
     
-    -t, --filetype  Sets the file type (Default 'js')
-    --comment  Sets the tag to be used for comments
-    -R Enables recursive search of files in the directory (Default False)
+    -t, --filetype    Sets the file type (Default 'js')
+    --comment         Sets the tag to be used for comments
+    -R Enables        Recursive search of files in the directory (Default False)
     
     *required
 
