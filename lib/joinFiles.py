@@ -65,7 +65,7 @@ class joinFiles:
                 filedata = ntpath.basename(file) + ' - united with WebDevTools'
                 title = self.comment(filedata) + '\n'
                 self.join += title + item.read() + '\n'
-            print('joined files!')
+        print('joined files!')
 
     def save(self, path):
         conf = open(path, 'w+')
