@@ -123,8 +123,8 @@ In these directories, directory paths chosen for the sites should also be allowe
 
 ###Information about the parameters
 
-####webdev site
-    webdev <Site Url>* <directory path>
+####site
+    webdev site <Site Url>* <directory path>
     
     -h, --help            Show this help message and exit
     -p PORT, --port=PORT  Port (Default 80) 
@@ -135,16 +135,16 @@ In these directories, directory paths chosen for the sites should also be allowe
     
     *required
 
-####webdev host
-    webdev <Site Url>* <Ip>
+####host
+    webdev host <Site Url>* <Ip>
     
     -h, --help    Show this help message and exit
     -r, --remove  Removes the specified host
     
     *required
     
-####webdev join
-    webdev <new.filename>* <target1>* <target2> <...>
+####webdev
+    webdev join <new.filename>* <target1>* <target2> <...>
     
     -t, --filetype  Sets the file type (Default 'js')
     --comment  Sets the tag to be used for comments
