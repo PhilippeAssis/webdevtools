@@ -30,15 +30,11 @@
  $$                                                              $$
  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 """
-import os, shutil
+import os
+import shutil
 from optparse import OptionParser
 
 from lib.tools import tools
-from lib.apache2 import apache2
-from lib.hosts import hosts
-
-
-
 
 
 # Setting parameters
@@ -59,7 +55,9 @@ parser.add_option("-l", "--local", dest="host",
                   action="store_true")
 parser.add_option("-r", "--remove", dest="remove", help="Remove site.py", default=False, action="store_true")
 parser.add_option("-z", "--unzip", dest="unzip", help="Unzip in path", default=None)
-
+parser.add_option("-R", "--recursive", dest="recursive", help="Enables recursive search of files in the directory", default=False, action="store_true")
+parser.add_option("-t", "--filetype", dest="filetype", help="Sets the file type", default='js')
+parser.add_option("--comment", dest="comment", help="Sets the tag to be used for comments", default=None)
 
 (options, args) = parser.parse_args()
 
@@ -70,81 +68,108 @@ if len(args) == 0:
 
 # Defining arguments
 action = args[0]
-name = args[1]
 
-if name is None:
-    print(
-        "ERROR: the url of the site.py is required. Use '-s www.example.com' to declare the url or '-h' for more details.")
-    exit(0)
+if action in ('site', 'host'):
+    from lib.apache2 import apache2
+    from lib.hosts import hosts
 
-if len(args) > 2:
-    if action == 'site':
-        path = args[2]
-        if len(args) > 3:
-            ip = args[3]
-        else:
-            ip = options.ip
-    elif action == 'host':
-        ip = args[2]
-else:
-    path = None
-    ip = options.ip
+    name = args[1]
 
-# Action of command 'site'
-if action == 'site':
-    if options.remove is False and path is None and options.auto is '1':
-        print("As the directory path is not specified, '/var/www/'" + name + " is created")
-        path = '/var/www/' + name
-    elif options.remove is True and path is None:
-        # Finding path in the conf apache
-        path = tools.locateLine("/etc/apache2/sites-available/%s.conf" % name, 'DocumentRoot')
+    if name is None:
+        print(
+            "ERROR: the url of the site.py is required. Use '-s www.example.com' to declare the url or '-h' for more details.")
+        exit(0)
 
-        if path is not None:
-            for ch in ['DocumentRoot', ' ', '\'', '\n']:
-                path = path.replace(ch, '')
-        else:
-            print('Path not found, action aborted.\n')
-            exit(0)
-
-    # Instantiating classes
-    apache = apache2(name, path)
-    host = hosts(name, ip)
-
-
-    # Evaluating build directory or removal
-    if os.path.exists(path) is False and options.remove is False:
-        if options.notcreatedir is False:
-            os.makedirs(path)
-        else:
-            print('The directory path does not exist. Action aborted.\n')
-            exit(0)
-    elif os.path.exists(path) is True and options.remove is True and options.path is True:
-        if tools.query('Are you sure you want to remove It directory and all its contents?', 'no') is True:
-            shutil.rmtree(path)
-            print('Directory %s removed.\n' % path)
-        else:
-            print('Directory %s not removed.\n' % path)
-
-
-    if options.unzip is not None and options.remove is False:
-        print('Unpacking files...\n')
-        os.system('sudo unzip %s -d %s' % (options.unzip,path))
-
-    # Adding, updating or removing the conf apache and the host, if necessary
-    if options.remove:
-        apache.remove()
-        host.remove()
+    if len(args) > 2:
+        if action == 'site':
+            path = args[2]
+            if len(args) > 3:
+                ip = args[3]
+            else:
+                ip = options.ip
+        elif action == 'host':
+            ip = args[2]
     else:
-        apache.created(options.port)
-        if options.host is True:
+        path = None
+        ip = options.ip
+
+    # Action of command 'site'
+    if action == 'site':
+        if options.remove is False and path is None and options.auto is '1':
+            print("As the directory path is not specified, '/var/www/'" + name + " is created")
+            path = '/var/www/' + name
+        elif options.remove is True and path is None:
+            # Finding path in the conf apache
+            path = tools.locateLine("/etc/apache2/sites-available/%s.conf" % name, 'DocumentRoot')
+
+            if path is not None:
+                for ch in ['DocumentRoot', ' ', '\'', '\n']:
+                    path = path.replace(ch, '')
+            else:
+                print('Path not found, action aborted.\n')
+                exit(0)
+
+        # Instantiating classes
+        apache = apache2(name, path)
+        host = hosts(name, ip)
+
+
+        # Evaluating build directory or removal
+        if os.path.exists(path) is False and options.remove is False:
+            if options.notcreatedir is False:
+                os.makedirs(path)
+            else:
+                print('The directory path does not exist. Action aborted.\n')
+                exit(0)
+        elif os.path.exists(path) is True and options.remove is True and options.path is True:
+            if tools.query('Are you sure you want to remove It directory and all its contents?', 'no') is True:
+                shutil.rmtree(path)
+                print('Directory %s removed.\n' % path)
+            else:
+                print('Directory %s not removed.\n' % path)
+
+        if options.unzip is not None and options.remove is False:
+            print('Unpacking files...\n')
+            os.system('sudo unzip %s -d %s' % (options.unzip, path))
+
+        # Adding, updating or removing the conf apache and the host, if necessary
+        if options.remove:
+            apache.remove()
+            host.remove()
+        else:
+            apache.created(options.port)
+            if options.host is True:
+                host.created()
+
+
+    # Action of command 'host'
+    elif action == 'host':
+        host = hosts(name, ip)
+
+        if options.remove:
+            host.remove()
+        else:
             host.created()
 
+elif action == 'join':
+    from lib.joinFiles import joinFiles
 
-# Action of command 'host'
-elif action == 'host':
-    host = hosts(name, ip)
+    if len(args) <= 2:
+        print("ERROR: files and way of salvation undeclared.")
+        exit(0)
 
-    if options.remove:
-        host.remove()
-    else:
-        host.created()
+    path = args[1]
+    files = args[2:]
+    file = joinFiles()
+
+    file.type = options.filetype
+
+    if options.comment is not None:
+        if not '%s' in options.comment:
+            options.comment += ' %s'
+
+        file.comments[options.filetype] = options.comment
+
+    file.merge(files, options.recursive)
+
+    file.save(path)

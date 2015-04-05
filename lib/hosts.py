@@ -9,7 +9,7 @@ class hosts:
         for i, line in enumerate(self.data):
             if self.site in line:
                 self.data[i] = ''
-                print("Host %s removed!" % self.site)
+                print("Removing %s in host...!" % self.site)
 
         self.save()
 
@@ -17,12 +17,12 @@ class hosts:
         for i, line in enumerate(self.data):
             if self.site in line:
                 self.data[i] = self.ip + ' ' + self.site + '\n'
-                print("Host %s modified!" % self.site)
+                print("modifying %s in host..." % self.site)
                 break
 
             if line in ['\n', '\r\n']:
                 self.data[i] = self.ip + ' ' + self.site + '\n\n'
-                print("Host %s added!" % self.site)
+                print("Adding %s in host..." % self.site)
                 break
             elif line in ['\n', '\r\n']:
                 print("NO ACTION: Host does not exist, so it can not be removed.")
