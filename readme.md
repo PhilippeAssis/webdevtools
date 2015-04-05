@@ -143,7 +143,7 @@ In these directories, directory paths chosen for the sites should also be allowe
     
     *required
     
-####webdev
+####join
     webdev join <new.filename>* <target1>* <target2> <...>
     
     -t, --filetype  Sets the file type (Default 'js')
