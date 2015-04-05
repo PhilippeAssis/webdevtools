@@ -80,7 +80,7 @@ To remove a host type
 
 For details on the parameter settings for each program Use '-h'
 
-##Join Files
+##JOIN
 Une content files creating a single file
 
     webdev join <new.filename> <target1> <target2> <target3>
