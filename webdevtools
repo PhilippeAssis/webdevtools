@@ -58,6 +58,8 @@ parser.add_option("-z", "--unzip", dest="unzip", help="Unzip in path", default=N
 parser.add_option("-R", "--recursive", dest="recursive", help="Enables recursive search of files in the directory", default=False, action="store_true")
 parser.add_option("-t", "--filetype", dest="filetype", help="Sets the file type", default='js')
 parser.add_option("--comment", dest="comment", help="Sets the tag to be used for comments", default=None)
+parser.add_option("--bower", dest="bower", help="Sets the tag to be used for comments", default=False, action="store_true")
+parser.add_option("--bowerDirectory", dest="bowerDirectory", help="Sets the tag to be used for comments", default='vendor', action="store_true")
 
 (options, args) = parser.parse_args()
 
@@ -76,8 +78,7 @@ if action in ('site', 'host'):
     name = args[1]
 
     if name is None:
-        print(
-            "ERROR: the url of the site.py is required. Use '-s www.example.com' to declare the url or '-h' for more details.")
+        print("ERROR: the url of the site.py is required. Use '-s www.example.com' to declare the url or '-h' for more details.")
         exit(0)
 
     if len(args) > 2:
@@ -113,7 +114,6 @@ if action in ('site', 'host'):
         apache = apache2(name, path)
         host = hosts(name, ip)
 
-
         # Evaluating build directory or removal
         if os.path.exists(path) is False and options.remove is False:
             if options.notcreatedir is False:
@@ -141,6 +141,17 @@ if action in ('site', 'host'):
             if options.host is True:
                 host.created()
 
+        #Bower!
+        if options.bower is True:
+            print('Creating configuration file Bower...')
+            bowerrcContent = """{
+  "directory": "%s"
+}""" % options.bowerDirectory
+
+            bowerrc = open('%s/.bowerrc' % path, 'w+')
+            bowerrc.write(bowerrcContent)
+            bowerrc.close()
+            print('".bowerrc" created!')
 
     # Action of command 'host'
     elif action == 'host':
