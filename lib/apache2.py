@@ -18,9 +18,12 @@ class apache2:
             CustomLog ${APACHE_LOG_DIR}/access.log combined
         </VirtualHost>""" % (port, self.site, self.path)
 
-        conf = open('/etc/apache2/sites-available/%s.conf' % self.site, 'w+')
+        # conf = open('/etc/apache2/sites-available/%s.conf' % self.site, 'w+')
+        conf = open('/tmp/%s.conf' % self.site, 'w+')
         conf.write(text)
         conf.close()
+
+        os.system("sudo mv /tmp/%s.conf /etc/apache2/sites-available/%s.conf" % (self.site,self.site))
 
         print('Create apache2 config:')
         print(text + '\n')
@@ -32,7 +35,7 @@ class apache2:
         print("Removing %s..." % self.site)
         if os.path.exists("/etc/apache2/sites-available/%s.conf" % self.site) is True:
             os.system("sudo a2dissite %s" % self.site)
-            os.remove("/etc/apache2/sites-available/%s.conf" % self.site)
+            os.system("sudo rm /etc/apache2/sites-available/%s.conf" % self.site)
         else:
             print("NO ACTION: Site does not exist")
 

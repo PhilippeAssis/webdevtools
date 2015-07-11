@@ -1,3 +1,5 @@
+import os
+
 class hosts:
     def __init__(self, site, ip='127.0.0.1'):
         self.site = site
@@ -33,6 +35,8 @@ class hosts:
 
     def save(self):
         data = ''.join(self.data)
-        conf = open('/etc/hosts','w+')
+        conf = open('/tmp/hosts','w+')
         conf.write(data)
         conf.close()
+
+        os.system("sudo mv /tmp/hosts /etc/hosts")
