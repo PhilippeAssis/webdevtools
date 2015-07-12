@@ -58,7 +58,7 @@ parser.add_option("-z", "--unzip", dest="unzip", help="Unzip in path", default=N
 parser.add_option("-R", "--recursive", dest="recursive", help="Enables recursive search of files in the directory", default=False, action="store_true")
 parser.add_option("-t", "--filetype", dest="filetype", help="Sets the file type", default='js')
 parser.add_option("--comment", dest="comment", help="Sets the tag to be used for comments", default=None)
-parser.add_option("--bower", dest="bower", help="Sets the tag to be used for comments", default=False, action="store_true")
+parser.add_option("-b", "--bower", dest="bower", help="Sets the tag to be used for comments", default=False, action="store_true")
 parser.add_option("--bowerDirectory", dest="bowerDirectory", help="Sets the tag to be used for comments", default='vendor', action="store_true")
 
 (options, args) = parser.parse_args()
