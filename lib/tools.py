@@ -1,6 +1,6 @@
 import sys, os
 
-class tools:
+class Tools:
     def query(question, default="yes"):
         valid = {"yes": True, "y": True, "ye": True, "no": False, "n": False}
         if default is None:

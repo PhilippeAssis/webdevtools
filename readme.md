@@ -110,7 +110,23 @@ To join several files of child directories, use 'R' to activate recursion:
     $ webdev join .js myscripts/.js
 
 This command will unite all the file extension 'js' the current directory and child directories.
-        
+
+##GIT CLONE
+Use 'clone' to clone git repositories
+
+    $ webdev clone <git.remote> <git.path> <site.url> <site.path or --path>
+
+If site.patch or --path is not yet declared site.url is, git.path will be set as path of site.path
+By declaring the site, the localhost will be declared as real automatically
+
+##PWD option (-pwd)
+
+Declare --pwd or --PWD to set root path as your current directory.    
+
+Example:
+    assis@philippe-ubuntu:/var/www/html$ webdev site mysite.dev mysitedir --pwd
+
+The above example returns as path "/var/www/html/mysitedir"
 
 ###Important!
 The use of the root (sudo) may be necessary if your user has not permission to edit the contents of the following directories:

@@ -1,6 +1,6 @@
 import os
 
-class hosts:
+class Hosts:
     def __init__(self, site, ip='127.0.0.1'):
         self.site = site
         self.ip = ip

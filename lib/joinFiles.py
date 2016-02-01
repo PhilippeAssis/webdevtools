@@ -2,7 +2,7 @@ import os
 import fnmatch
 import ntpath
 
-class joinFiles:
+class JoinFiles:
     comments = {
         'css': '/*\n %s\n*/',
         'html': '<!--\n %s\n-->',
