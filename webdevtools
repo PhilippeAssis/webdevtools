@@ -101,7 +101,7 @@ if action in ('site', 'host'):
         elif action == 'host':
             ip = args[2]
     else:
-        path = None
+        path = regulePath(None)
         ip = options.ip
 
     # Action of command 'site'
@@ -211,5 +211,3 @@ elif action == 'clone':
             path = regulePath(args[4]);
 
         os.system("webdev site %s %s -l" % (args[3], path))
-
-
