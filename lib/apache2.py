@@ -12,7 +12,7 @@ class Apache2:
         text = """ #created by site.py
 <VirtualHost *:%s>
     ServerName %s
-    ServerAlias %s
+    ServerAlias www.%s
     ServerAdmin webmaster@localhost
     DocumentRoot %r
     ErrorLog ${APACHE_LOG_DIR}/error.log
