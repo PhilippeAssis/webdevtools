@@ -9,14 +9,15 @@ class Apache2:
         print('Create directory:')
         print(self.path + "\n")
 
-        text = """#created by site.py
-        <VirtualHost *:%s>
-            ServerName %s
-            ServerAdmin webmaster@localhost
-            DocumentRoot %r
-            ErrorLog ${APACHE_LOG_DIR}/error.log
-            CustomLog ${APACHE_LOG_DIR}/access.log combined
-        </VirtualHost>""" % (port, self.site, self.path)
+        text = """ #created by site.py
+<VirtualHost *:%s>
+    ServerName %s
+    ServerAlias %s
+    ServerAdmin webmaster@localhost
+    DocumentRoot %r
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>""" % (port, self.site, self.site, self.path)
 
         # conf = open('/etc/apache2/sites-available/%s.conf' % self.site, 'w+')
         conf = open('/tmp/%s.conf' % self.site, 'w+')
